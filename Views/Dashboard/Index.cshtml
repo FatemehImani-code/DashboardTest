@@ -1,0 +1,76 @@
+﻿@model List<Dashboard.Models.ViewModels.DashboardViewModel>
+
+@{
+    ViewData["Title"] = "Dashboard";
+}
+
+<h2>Dashboard</h2>
+
+<div style="width:600px;">
+    <canvas id="failuresChart"></canvas>
+</div>
+
+<div style="width:600px;">
+    <canvas id="downtimeChart"></canvas>
+</div>
+
+<div style="width:600px;">
+    <canvas id="costChart"></canvas>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+    // Extract data from the strongly-typed model
+    const labels = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.Select(x => x.Equipment)));
+
+    const failuresData = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.Select(x => x.TotalFailures)));
+    const downtimeData = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.Select(x => x.TotalDowntime)));
+    const costData = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.Select(x => x.TotalCost)));
+
+    // Failures Chart
+    new Chart(document.getElementById('failuresChart'), {
+        type: 'bar',
+        data: {
+            labels: labels,
+            datasets: [{
+                label: 'Total Failures',
+                data: failuresData,
+                backgroundColor: 'rgba(255, 99, 132, 0.5)'
+            }]
+        }
+    });
+
+    // Downtime Chart
+    new Chart(document.getElementById('downtimeChart'), {
+        type: 'line',
+        data: {
+            labels: labels,
+            datasets: [{
+                label: 'Total Downtime (hours)',
+                data: downtimeData,
+                borderColor: 'rgba(54, 162, 235, 1)',
+                fill: false
+            }]
+        }
+    });
+
+    // Cost Chart
+    new Chart(document.getElementById('costChart'), {
+        type: 'pie',
+        data: {
+            labels: labels,
+            datasets: [{
+                label: 'Total Cost',
+                data: costData,
+                backgroundColor: [
+                    'rgba(255, 99, 132, 0.5)',
+                    'rgba(54, 162, 235, 0.5)',
+                    'rgba(255, 206, 86, 0.5)',
+                    'rgba(75, 192, 192, 0.5)',
+                    'rgba(153, 102, 255, 0.5)'
+                ]
+            }]
+        }
+    });
+</script>

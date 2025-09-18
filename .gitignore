@@ -1,0 +1,23 @@
+# Visual Studio / ASP.NET Core
+.vs/
+bin/
+obj/
+*.user
+*.suo
+*.sln.docstates
+
+# Rider IDE
+.idea/
+
+# ReSharper
+_ReSharper*/
+
+# Node / npm
+node_modules/
+
+# Logs
+*.log
+
+# Dotnet temporary files
+*.DS_Store
+*.dbmdl
